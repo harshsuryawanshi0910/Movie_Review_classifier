@@ -1,0 +1,1 @@
+# movie review classifier using simple RNN #
