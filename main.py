@@ -1,6 +1,6 @@
-# ================================
+
 # Import Libraries
-# ================================
+
 import numpy as np
 import tensorflow as tf
 import re
@@ -12,22 +12,20 @@ from tensorflow.keras.datasets import imdb
 from tensorflow.keras.preprocessing import sequence
 from tensorflow.keras.models import load_model
 
-# ================================
 # Config
-# ================================
+
 VOCAB_SIZE = 10000
 MAX_LEN = 500
 FILE_NAME = "review_history.csv"
 
-# ================================
+
 # Load Data
-# ================================
+
 word_index = imdb.get_word_index()
 model = load_model('simple_rnn_imdb.h5')
 
-# ================================
+
 # Preprocessing Function
-# ================================
 def preprocess_text(text):
     text = re.sub(r"[^\w\s]", "", text)
     words = text.lower().split()
@@ -42,9 +40,9 @@ def preprocess_text(text):
     padded_review = sequence.pad_sequences([encoded_review], maxlen=MAX_LEN)
     return padded_review
 
-# ================================
+# 
 # Save to CSV
-# ================================
+
 def save_review(review, sentiment, score):
     data = {
         "Review": [review],
@@ -59,9 +57,9 @@ def save_review(review, sentiment, score):
     else:
         df.to_csv(FILE_NAME, index=False)
 
-# ================================
+
 # Load History
-# ================================
+
 def load_history():
     if os.path.exists(FILE_NAME):
         return pd.read_csv(FILE_NAME)
@@ -119,9 +117,9 @@ with col1:
 with col2:
     show_history_btn = st.button("Show History")
 
-# ================================
+
 # Classification
-# ================================
+
 if classify_btn:
     if user_input.strip() == "":
         st.warning(" Please enter a review")
@@ -141,9 +139,9 @@ if classify_btn:
         # Progress bar
         st.progress(int(prediction * 100))
 
-# ================================
+
 # Show History
-# ================================
+
 if show_history_btn:
     st.subheader(" Review History")
 
