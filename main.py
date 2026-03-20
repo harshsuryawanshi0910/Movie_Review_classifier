@@ -66,9 +66,8 @@ def load_history():
     else:
         return pd.DataFrame(columns=["Review", "Sentiment", "Score"])
 
-# ================================
 #  Streamlit UI Design
-# ================================
+
 st.set_page_config(page_title="Movie Sentiment AI", page_icon="🎬", layout="centered")
 
 st.markdown("""
@@ -138,6 +137,7 @@ if classify_btn:
 
         # Progress bar
         st.progress(int(prediction * 100))
+
 
 
 # Show History
