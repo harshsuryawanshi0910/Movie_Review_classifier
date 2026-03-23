@@ -5,6 +5,7 @@ This project is a Movie Review Sentiment Classifier built using a Simple Recurre
 
 The system is trained on the IMDB dataset, which contains thousands of labeled movie reviews. By learning patterns in sequences of words, the RNN model captures contextual meaning and predicts sentiment effectively.
 
+
 A user-friendly Streamlit web interface is integrated, allowing users to enter their own movie reviews and get instant predictions along with confidence scores. Additionally, the application stores previously classified reviews in a CSV file for future reference and analysis.
 
 
@@ -40,17 +41,17 @@ IMDB Dataset
 
 # How It Works
 
-User enters a movie review in the web app
+1.User enters a movie review in the web app
 
-Text is preprocessed (cleaning, tokenization, padding)
+2.Text is preprocessed (cleaning, tokenization, padding)
 
-Converted into numerical sequence using IMDB word index
+3.Converted into numerical sequence using IMDB word index
 
-Passed into the trained Simple RNN model
+4.Passed into the trained Simple RNN model
 
-Model predicts sentiment score
+5.Model predicts sentiment score
 
-Result displayed as Positive or Negative
+6.Result displayed as Positive or Negative
 
-Review is stored in a CSV file
+7.Review is stored in a CSV file
 
