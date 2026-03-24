@@ -1,57 +1,36 @@
-# movie review classifier using simple RNN #
-Project Summary
+oerview
 
-This project is a Movie Review Sentiment Classifier built using a Simple Recurrent Neural Network (RNN). The model analyzes textual movie reviews and classifies them as Positive or Negative based on their sentiment.
+This project is an end‑to‑end **movie review sentiment classifier** that predicts whether a given review is **Positive** or **Negative**. The core model is a Simple RNN trained on the [IMDB dataset](https://www.tensorflow.org/api_docs/python/tf/keras/datasets/imdb), which contains 50,000 labeled movie reviews.
 
-The system is trained on the IMDB dataset, which contains thousands of labeled movie reviews. By learning patterns in sequences of words, the RNN model captures contextual meaning and predicts sentiment effectively.
+The application is wrapped in a **Streamlit web interface**, offering:
+- Real‑time prediction with confidence scores
+- Review history storage (CSV)
+- Batch analysis from PDF files
+- Interactive analytics dashboard (sentiment distribution, trends)
+- Clean, modern UI with animations
 
+---
 
-A user-friendly Streamlit web interface is integrated, allowing users to enter their own movie reviews and get instant predictions along with confidence scores. Additionally, the application stores previously classified reviews in a CSV file for future reference and analysis.
+##  Key Features
 
+-  **Single Review Analysis** – Type any review and get instant sentiment.
+-  **Batch PDF Upload** – Upload a PDF with multiple reviews (separated by blank lines) and analyze all at once.
+-  **Review History** – All predictions are saved locally in a CSV file for later review.
+-  **Analytics Dashboard** – Visual insights (pie chart, histogram, timeline) based on stored reviews.
+-  **Attractive UI** – Gradient backgrounds, animated cards, progress bars, and gauge charts.
+-  **Data Export** – Download history or batch results as CSV.
+-  **Backward Compatibility** – Automatically handles older CSV formats.
 
-# Key Features
+---
 
- 1.Deep Learning Model: Built using Simple RNN for sequence processing
+##  Technologies Used
 
- 2.Sentiment Classification: Predicts Positive or Negative reviews
-
- 3.Real-time Prediction: Instant results via Streamlit interface
-
- 4.Review History Storage: Saves all predictions in a CSV file
-
- 5.Interactive UI: Clean and attractive user interface
-
- 6.Text Preprocessing: Tokenization, padding, and vocabulary control
-
-
-
-# Technologies Used
-
-Python
-
-TensorFlow / Keras
-
-Streamlit
-
-NumPy & Pandas
-
-IMDB Dataset
-
-
-
-# How It Works
-
-1.User enters a movie review in the web app
-
-2.Text is preprocessed (cleaning, tokenization, padding)
-
-3.Converted into numerical sequence using IMDB word index
-
-4.Passed into the trained Simple RNN model
-
-5.Model predicts sentiment score
-
-6.Result displayed as Positive or Negative
-
-7.Review is stored in a CSV file
+| Category          | Tools / Libraries                                     |
+|-------------------|-------------------------------------------------------|
+| Deep Learning     | TensorFlow, Keras, Simple RNN                         |
+| Web Interface     | Streamlit                                             |
+| Data Processing   | NumPy, Pandas, re, datetime                           |
+| Visualization     | Plotly                                                |
+| PDF Extraction    | pdfplumber                                            |
+| Dataset           | IMDB (built‑in TensorFlow dataset)                    |
 
