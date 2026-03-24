@@ -1,0 +1,80 @@
+Timestamp,Review,Sentiment,Confidence Score
+2026-03-24 00:08:16,"movie is fantastic
+",Positive,0.9937434196472168
+2026-03-24 00:15:57,"in the starting of movie i feel more boring but let i know it was so logical
+",Positive,0.6563122272491455
+2026-03-24 00:16:24,"in the starting of movie i feel more boring but let i know it was so logical
+",Positive,0.6563122272491455
+2026-03-24 00:16:29,"What a waste of time! The plot was predictable, the acting was wooden, and the special effects looked like they were from 20 years ago.",Negative,0.024878714233636856
+2026-03-24 00:16:43,This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!,Positive,0.9114297032356262
+2026-03-24 00:17:53,"This movie was absolutely incredible! From start to finish, it kept me completely engaged. The performances were powerful and felt very real, especially the lead actor who delivered an unforgettable performance. The cinematography was stunning, with beautifully shot scenes that added depth to the story. The plot was well-paced and full of meaningful moments that kept me emotionally invested. Overall, it’s one of the best films I’ve seen in a long time and I would highly recommend it to anyone looking for a truly enjoyable and memorable experience.",Positive,0.9986438155174255
+2026-03-24 00:17:55,"This movie was absolutely incredible! From start to finish, it kept me completely engaged. The performances were powerful and felt very real, especially the lead actor who delivered an unforgettable performance. The cinematography was stunning, with beautifully shot scenes that added depth to the story. The plot was well-paced and full of meaningful moments that kept me emotionally invested. Overall, it’s one of the best films I’ve seen in a long time and I would highly recommend it to anyone looking for a truly enjoyable and memorable experience.",Positive,0.9986438155174255
+2026-03-24 00:18:35,"This movie was extremely disappointing and felt like a complete waste of time. The storyline was predictable and lacked originality, making it hard to stay interested. The acting was weak and unconvincing, with characters that felt flat and poorly developed. Even the pacing was off, with several scenes dragging on far too long. The special effects were underwhelming and didn’t add anything meaningful to the experience. Overall, it failed to deliver on almost every level, and I wouldn’t recommend it to anyone.",Negative,0.03260369226336479
+2026-03-24 00:19:15,This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!,Positive,0.9114297032356262
+2026-03-24 00:24:51,This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!,Positive,0.9114297032356262
+2026-03-24 00:25:06,"What a waste of time! The plot was predictable, the acting was wooden, and the special effects looked like they were from 20 years ago.",Negative,0.024878714233636856
+2026-03-24 00:51:36,This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!,Positive,0.9114297032356262
+2026-03-24 00:54:15,This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!,Positive,0.9114297032356262
+2026-03-24 00:57:41,movie is boring in staring but of the end it was very interesting and fantastic,Positive,0.7567238211631775
+2026-03-24 21:42:38,1. Inception (2010),Positive,0.9546029567718506
+2026-03-24 21:42:38,A mind-bending sci-fi thriller that blends action with philosophical depth. The layered dream concept,Positive,0.7278510332107544
+2026-03-24 21:42:38,"is executed brilliantly, though it can feel complex on first watch. Leonardo DiCaprio delivers a strong",Positive,0.9782858490943909
+2026-03-24 21:42:39,performance.,Positive,0.9985994100570679
+2026-03-24 21:42:39,2. The Dark Knight (2008),Positive,0.9370338916778564
+2026-03-24 21:42:39,"A gripping superhero film elevated by Heath Ledger’s unforgettable Joker. The movie explores chaos,",Positive,0.9988906979560852
+2026-03-24 21:42:39,"morality, and heroism in a grounded, intense way.",Positive,0.8848288059234619
+2026-03-24 21:42:39,3. Titanic (1997),Positive,0.9976043701171875
+2026-03-24 21:42:40,"A visually stunning romantic tragedy set against a historical disaster. While the love story is central,",Positive,0.9091731309890747
+2026-03-24 21:42:40,the film’s emotional impact comes from its scale and realism.,Positive,0.9899981617927551
+2026-03-24 21:42:40,4. Parasite (2019),Positive,0.9468828439712524
+2026-03-24 21:42:41,A sharp social commentary wrapped in a darkly comedic thriller. It seamlessly blends genres while,Positive,0.7972909212112427
+2026-03-24 21:42:41,exposing class inequality in a powerful and unexpected way.,Positive,0.9597651958465576
+2026-03-24 21:42:41,5. Avengers: Endgame (2019),Positive,0.8262193202972412
+2026-03-24 21:42:42,A satisfying conclusion to over a decade of storytelling. Packed with emotional moments and epic,Positive,0.997891902923584
+2026-03-24 21:42:42,"battles, though it relies heavily on prior films for full impact.",Positive,0.9716569185256958
+2026-03-24 21:42:42,6. 3 Idiots (2009),Positive,0.9127083420753479
+2026-03-24 21:42:43,A heartfelt and humorous take on education and societal pressure. Strong performances and,Positive,0.9650075435638428
+2026-03-24 21:42:43,meaningful themes make it both entertaining and thought-provoking.,Positive,0.6880785822868347
+2026-03-24 21:42:43,7. The Shawshank Redemption (1994),Positive,0.9853373765945435
+2026-03-24 21:42:44,"A deeply inspiring story about hope and perseverance. The slow pace works in its favor, building a",Positive,0.5838518738746643
+2026-03-24 21:42:44,powerful emotional payoff.,Positive,0.9947633743286133
+2026-03-24 21:42:44,8. Joker (2019),Positive,0.999605119228363
+2026-03-24 21:42:45,A dark character study with a haunting performance by Joaquin Phoenix. It’s unsettling yet,Positive,0.8700003623962402
+2026-03-24 21:42:45,"compelling, offering a different take on a comic book villain.",Positive,0.880550742149353
+2026-03-24 21:42:45,9. Dangal (2016),Positive,0.9984206557273865
+2026-03-24 21:42:46,An inspiring sports drama based on a true story. It combines emotional storytelling with strong,Positive,0.998148500919342
+2026-03-24 21:42:46,performances and a powerful message about gender equality.,Positive,0.8970019221305847
+2026-03-24 21:42:46,10. Interstellar (2014),Positive,0.9667307734489441
+2026-03-24 21:42:47,"A visually breathtaking space epic that explores love, time, and survival. While ambitious and",Positive,0.9411959648132324
+2026-03-24 21:42:47,"emotional, some parts may feel overly complex.",Positive,0.9922341108322144
+2026-03-24 23:16:00,"1. Inception (2010)
+A mind-bending sci-fi thriller that blends action with philosophical depth. The layered dream concept
+is executed brilliantly, though it can feel complex on first watch. Leonardo DiCaprio delivers a strong
+performance.
+2. The Dark Knight (2008)
+A gripping superhero film elevated by Heath Ledger’s unforgettable Joker. The movie explores chaos,
+morality, and heroism in a grounded, intense way.
+3. Titanic (1997)
+A visually stunning romantic tragedy set against a historical disaster. While the love story is central,
+the film’s emotional impact comes from its scale and realism.
+4. Parasite (2019)
+A sharp social commentary wrapped in a darkly comedic thriller. It seamlessly blends genres while
+exposing class inequality in a powerful and unexpected way.
+5. Avengers: Endgame (2019)
+A satisfying conclusion to over a decade of storytelling. Packed with emotional moments and epic
+battles, though it relies heavily on prior films for full impact.
+6. 3 Idiots (2009)
+A heartfelt and humorous take on education and societal pressure. Strong performances and
+meaningful themes make it both entertaining and thought-provoking.
+7. The Shawshank Redemption (1994)
+A deeply inspiring story about hope and perseverance. The slow pace works in its favor, building a
+powerful emotional payoff.
+8. Joker (2019)
+A dark character study with a haunting performance by Joaquin Phoenix. It’s unsettling yet
+compelling, offering a different take on a comic book villain.
+9. Dangal (2016)
+An inspiring sports drama based on a true story. It combines emotional storytelling with strong
+performances and a powerful message about gender equality.
+10. Interstellar (2014)
+A visually breathtaking space epic that explores love, time, and survival. While ambitious and
+emotional, some parts may feel overly complex.",Positive,0.9989967942237854

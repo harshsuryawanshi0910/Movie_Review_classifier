@@ -12,6 +12,14 @@ from tensorflow.keras.datasets import imdb
 from tensorflow.keras.preprocessing import sequence
 from tensorflow.keras.models import load_model
 
+# Try to import pdfplumber; if not installed, set to None and handle later
+try:
+    import pdfplumber
+    PDF_SUPPORT = True
+except ImportError:
+    pdfplumber = None
+    PDF_SUPPORT = False
+
 # Config
 VOCAB_SIZE = 10000
 MAX_LEN = 500
@@ -41,7 +49,7 @@ except Exception as e:
     st.error(f"Error loading model: {e}")
     st.stop()
 
-# Custom CSS for Enhanced UI (with visible titles)
+# Custom CSS for Enhanced UI (with visible titles and footer)
 st.markdown("""
     <style>
     /* Main container styling */
@@ -95,6 +103,17 @@ st.markdown("""
     .custom-card .stMarkdown h2,
     .custom-card .stMarkdown h3 {
         color: #1f2937 !important;
+    }
+    
+    /* Footer styling */
+    .footer {
+        text-align: center;
+        color: white !important;
+        padding: 1rem;
+        margin-top: 2rem;
+        border-radius: 10px;
+        background: rgba(0,0,0,0.2);
+        backdrop-filter: blur(5px);
     }
     
     /* Sentiment badges */
@@ -236,16 +255,13 @@ def save_review(review, sentiment, score):
     df = pd.DataFrame(data)
     
     if os.path.exists(FILE_NAME):
-        # Check if file exists and has the correct format
         try:
             existing_df = pd.read_csv(FILE_NAME)
-            # If existing file has old format, rename columns
             if 'Score' in existing_df.columns and 'Confidence Score' not in existing_df.columns:
                 existing_df = existing_df.rename(columns={'Score': 'Confidence Score'})
                 existing_df.to_csv(FILE_NAME, index=False)
             df.to_csv(FILE_NAME, mode='a', header=False, index=False)
         except:
-            # If there's any error, write with header
             df.to_csv(FILE_NAME, index=False)
     else:
         df.to_csv(FILE_NAME, index=False)
@@ -254,10 +270,8 @@ def save_review(review, sentiment, score):
 def load_history():
     if os.path.exists(FILE_NAME):
         df = pd.read_csv(FILE_NAME)
-        # Handle old format files
         if 'Score' in df.columns and 'Confidence Score' not in df.columns:
             df = df.rename(columns={'Score': 'Confidence Score'})
-        # Add Timestamp if missing
         if 'Timestamp' not in df.columns:
             df.insert(0, 'Timestamp', '')
         return df
@@ -271,7 +285,6 @@ def get_statistics(df):
         positive_reviews = len(df[df['Sentiment'] == 'Positive'])
         negative_reviews = len(df[df['Sentiment'] == 'Negative'])
         
-        # Handle Confidence Score column safely
         if 'Confidence Score' in df.columns:
             avg_confidence = df['Confidence Score'].mean()
         elif 'Score' in df.columns:
@@ -281,6 +294,18 @@ def get_statistics(df):
             
         return total_reviews, positive_reviews, negative_reviews, avg_confidence
     return 0, 0, 0, 0
+
+# Function to extract text from PDF (only if pdfplumber is available)
+def extract_text_from_pdf(pdf_file):
+    if not PDF_SUPPORT:
+        return None
+    text = ""
+    with pdfplumber.open(pdf_file) as pdf:
+        for page in pdf.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
+    return text
 
 # Sidebar
 with st.sidebar:
@@ -293,7 +318,6 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Stats in sidebar
     history_df = load_history()
     total, positive, negative, avg_conf = get_statistics(history_df)
     
@@ -326,33 +350,39 @@ st.markdown('<div class="main-title">🎬 Movie Review Sentiment AI</div>', unsa
 st.markdown('<div class="subtitle">Powered by Deep Learning • Analyze your movie reviews in seconds</div>', unsafe_allow_html=True)
 
 # Create tabs
-tab1, tab2, tab3 = st.tabs(["🔍 Analyze Review", "📜 Review History", "📈 Analytics"])
+tab1, tab2, tab3, tab4 = st.tabs(["🔍 Analyze Review", "📜 Review History", "📈 Analytics", "📄 Batch Upload (PDF)"])
 
+# Tab 1: Single review analysis
 with tab1:
-    # Input section
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown('<div class="custom-card">', unsafe_allow_html=True)
         st.markdown("### ✍️ Enter Your Review")
-        user_input = st.text_area(
-            "What did you think about the movie?",
-            height=150,
-            placeholder="Example: This movie was absolutely fantastic! The acting was superb and the storyline kept me engaged throughout..."
-        )
         
-        # Example prompts
+        if 'review_text' not in st.session_state:
+            st.session_state.review_text = ""
+        
         st.markdown("**Need inspiration? Try these examples:**")
         ex_col1, ex_col2 = st.columns(2)
         
         if ex_col1.button("🎭 Positive Example", key="positive_example"):
-            user_input = "This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!"
+            st.session_state.review_text = "This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!"
         
         if ex_col2.button("💔 Negative Example", key="negative_example"):
-            user_input = "What a waste of time! The plot was predictable, the acting was wooden, and the special effects looked like they were from 20 years ago."
+            st.session_state.review_text = "What a waste of time! The plot was predictable, the acting was wooden, and the special effects looked like they were from 20 years ago."
+        
+        user_input = st.text_area(
+            "What did you think about the movie?",
+            value=st.session_state.review_text,
+            height=150,
+            placeholder="Example: This movie was absolutely fantastic! The acting was superb and the storyline kept me engaged throughout...",
+            key="review_input"
+        )
+        
+        st.session_state.review_text = user_input
         
         st.markdown("---")
         
-        # Classify button
         classify_btn = st.button("🔍 Analyze Sentiment", use_container_width=True, key="classify_btn")
         
         if classify_btn:
@@ -362,26 +392,23 @@ with tab1:
                 with st.spinner("Analyzing your review..."):
                     processed = preprocess_text(user_input)
                     prediction = model.predict(processed)[0][0]
+                    prediction = float(prediction)
                     sentiment = "Positive" if prediction > 0.5 else "Negative"
                     confidence = prediction if prediction > 0.5 else 1 - prediction
+                    confidence = float(confidence)
                     
-                    # Save review
-                    save_review(user_input, sentiment, float(prediction))
+                    save_review(user_input, sentiment, prediction)
                     
-                    # Display results with animation
                     st.markdown("### 📊 Analysis Results")
                     
-                    # Sentiment badge
                     if sentiment == "Positive":
                         st.markdown(f'<div class="sentiment-positive" style="margin: 0 auto; text-align: center;">🎉 {sentiment} Sentiment</div>', unsafe_allow_html=True)
                     else:
                         st.markdown(f'<div class="sentiment-negative" style="margin: 0 auto; text-align: center;">😞 {sentiment} Sentiment</div>', unsafe_allow_html=True)
                     
-                    # Confidence score
                     st.markdown(f"**Confidence:** {confidence:.1%}")
                     st.progress(confidence)
                     
-                    # Create gauge chart
                     fig = go.Figure(go.Indicator(
                         mode = "gauge+number",
                         value = prediction * 100,
@@ -406,6 +433,7 @@ with tab1:
         
         st.markdown('</div>', unsafe_allow_html=True)
 
+# Tab 2: History
 with tab2:
     st.markdown('<div class="custom-card">', unsafe_allow_html=True)
     st.markdown("### 📜 Review History")
@@ -415,10 +443,8 @@ with tab2:
     if len(history) == 0:
         st.info("No reviews analyzed yet. Start by analyzing a review in the 'Analyze Review' tab!")
     else:
-        # Display as interactive dataframe
         display_df = history.copy()
         
-        # Format confidence score if exists
         if 'Confidence Score' in display_df.columns:
             display_df['Confidence Score'] = display_df['Confidence Score'].apply(lambda x: f"{x:.4f}")
         elif 'Score' in display_df.columns:
@@ -436,7 +462,6 @@ with tab2:
             }
         )
         
-        # Download options
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
@@ -457,6 +482,7 @@ with tab2:
     
     st.markdown('</div>', unsafe_allow_html=True)
 
+# Tab 3: Analytics
 with tab3:
     st.markdown('<div class="custom-card">', unsafe_allow_html=True)
     st.markdown("### 📈 Analytics Dashboard")
@@ -464,11 +490,9 @@ with tab3:
     history = load_history()
     
     if len(history) > 0:
-        # Ensure we have the right column names for analytics
         if 'Score' in history.columns and 'Confidence Score' not in history.columns:
             history = history.rename(columns={'Score': 'Confidence Score'})
         
-        # Sentiment distribution pie chart
         col1, col2 = st.columns(2)
         
         with col1:
@@ -484,7 +508,6 @@ with tab3:
                 st.plotly_chart(fig_pie, use_container_width=True)
         
         with col2:
-            # Confidence score histogram
             if 'Confidence Score' in history.columns:
                 fig_hist = px.histogram(
                     history,
@@ -497,7 +520,6 @@ with tab3:
                 fig_hist.update_layout(bargap=0.1)
                 st.plotly_chart(fig_hist, use_container_width=True)
         
-        # Timeline of reviews
         if len(history) > 1 and 'Timestamp' in history.columns:
             try:
                 history['Timestamp'] = pd.to_datetime(history['Timestamp'])
@@ -516,7 +538,6 @@ with tab3:
             except:
                 st.warning("Unable to create timeline chart. Ensure timestamps are in correct format.")
         
-        # Statistics cards
         st.markdown("### 📊 Key Metrics")
         total, positive, negative, avg_conf = get_statistics(history)
         
@@ -541,9 +562,134 @@ with tab3:
     
     st.markdown('</div>', unsafe_allow_html=True)
 
+# Tab 4: Batch Upload PDF (with blank line separator)
+with tab4:
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.markdown("### 📄 Batch Analyze Reviews from PDF")
+    st.markdown("Upload a PDF file containing multiple movie reviews. The app will extract each review and analyze sentiment.")
+    
+    if not PDF_SUPPORT:
+        st.error("❌ The 'pdfplumber' library is not installed. To use this feature, please install it by running: `pip install pdfplumber`")
+        st.stop()
+    
+    # Select separation method
+    st.markdown("**Select how reviews are separated in the PDF:**")
+    method = st.radio(
+        "Review separation method",
+        options=["Blank lines (paragraphs)", "Each line as separate review"],
+        help="If reviews are separated by blank lines (paragraphs), choose the first option. If each review is on its own line, choose the second."
+    )
+    method_value = 'blank_lines' if method == "Blank lines (paragraphs)" else 'each_line'
+    
+    uploaded_file = st.file_uploader("Choose a PDF file", type="pdf", key="pdf_uploader")
+    
+    if uploaded_file is not None:
+        try:
+            with st.spinner("Extracting text from PDF..."):
+                pdf_text = extract_text_from_pdf(uploaded_file)
+            
+            if not pdf_text.strip():
+                st.warning("No text found in the PDF. Please ensure the PDF contains selectable text.")
+            else:
+                # Split based on method
+                if method_value == 'blank_lines':
+                    # Split by blank lines (one or more newlines)
+                    import re
+                    # Normalize newlines
+                    text = re.sub(r'\r\n', '\n', pdf_text)
+                    # Split on blank lines (one or more empty lines)
+                    reviews = re.split(r'\n\s*\n', text.strip())
+                    # Remove empty strings and strip each review
+                    reviews = [r.strip() for r in reviews if r.strip()]
+                else:
+                    # Each line
+                    reviews = [line.strip() for line in pdf_text.split('\n') if line.strip()]
+                
+                st.info(f"Found {len(reviews)} reviews to analyze.")
+                
+                # Preview extracted reviews
+                with st.expander("Preview extracted reviews"):
+                    for i, rev in enumerate(reviews[:5]):
+                        st.write(f"**Review {i+1}:**")
+                        st.write(rev[:200] + "..." if len(rev) > 200 else rev)
+                    if len(reviews) > 5:
+                        st.write(f"... and {len(reviews)-5} more.")
+                
+                if st.button("🚀 Analyze All Reviews", key="batch_analyze_btn"):
+                    if len(reviews) == 0:
+                        st.warning("No reviews to analyze.")
+                    else:
+                        results = []
+                        progress_bar = st.progress(0)
+                        status_text = st.empty()
+                        
+                        for i, review in enumerate(reviews):
+                            progress = (i + 1) / len(reviews)
+                            progress_bar.progress(progress)
+                            status_text.text(f"Analyzing review {i+1} of {len(reviews)}...")
+                            
+                            processed = preprocess_text(review)
+                            prediction = model.predict(processed)[0][0]
+                            prediction = float(prediction)
+                            sentiment = "Positive" if prediction > 0.5 else "Negative"
+                            confidence = prediction if prediction > 0.5 else 1 - prediction
+                            confidence = float(confidence)
+                            
+                            results.append({
+                                "Review": review,
+                                "Sentiment": sentiment,
+                                "Confidence Score": confidence,
+                                "Prediction Score": prediction
+                            })
+                            
+                            save_review(review, sentiment, prediction)
+                        
+                        progress_bar.empty()
+                        status_text.empty()
+                        
+                        df_results = pd.DataFrame(results)
+                        
+                        st.success("Analysis complete!")
+                        st.markdown("### 📊 Batch Results")
+                        
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.metric("Total Reviews", len(df_results))
+                        with col2:
+                            pos_count = len(df_results[df_results['Sentiment'] == 'Positive'])
+                            st.metric("Positive", pos_count)
+                        with col3:
+                            neg_count = len(df_results[df_results['Sentiment'] == 'Negative'])
+                            st.metric("Negative", neg_count)
+                        
+                        st.dataframe(
+                            df_results,
+                            use_container_width=True,
+                            column_config={
+                                "Review": st.column_config.TextColumn("Review", width="large"),
+                                "Sentiment": st.column_config.TextColumn("Sentiment"),
+                                "Confidence Score": st.column_config.NumberColumn("Confidence", format="%.2f"),
+                                "Prediction Score": st.column_config.NumberColumn("Score", format="%.4f")
+                            }
+                        )
+                        
+                        csv = df_results.to_csv(index=False)
+                        st.download_button(
+                            label="📥 Download Results as CSV",
+                            data=csv,
+                            file_name=f"batch_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                            mime="text/csv",
+                            key="batch_download"
+                        )
+        
+        except Exception as e:
+            st.error(f"Error processing PDF: {e}")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
 # Footer
-st.markdown("---")
-st.markdown(
-    "<p style='text-align: center; color: #666;'>Made with ❤️ using TensorFlow & Streamlit | © 2024 Movie Sentiment AI</p>",
-    unsafe_allow_html=True
-)
+st.markdown("""
+    <div class="footer">
+        Made with  using TensorFlow & Streamlit | © 2024 Movie Sentiment AI
+    </div>
+""", unsafe_allow_html=True)
