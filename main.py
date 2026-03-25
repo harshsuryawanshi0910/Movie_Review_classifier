@@ -307,6 +307,22 @@ def extract_text_from_pdf(pdf_file):
                 text += page_text + "\n"
     return text
 
+# Function to split text into reviews based on method
+def split_into_reviews(text, method='blank_lines'):
+    if method == 'blank_lines':
+        # Split by two or more newlines (blank lines)
+        import re
+        # Normalize newlines
+        text = re.sub(r'\r\n', '\n', text)
+        # Split on blank lines (one or more empty lines)
+        reviews = re.split(r'\n\s*\n', text.strip())
+        # Remove empty strings and strip each review
+        reviews = [r.strip() for r in reviews if r.strip()]
+        return reviews
+    else:  # each_line
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        return lines
+
 # Sidebar
 with st.sidebar:
     st.markdown("""
@@ -562,7 +578,7 @@ with tab3:
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Tab 4: Batch Upload PDF (with blank line separator)
+# Tab 4: Batch Upload PDF (with multiline support)
 with tab4:
     st.markdown('<div class="custom-card">', unsafe_allow_html=True)
     st.markdown("### 📄 Batch Analyze Reviews from PDF")
@@ -572,14 +588,14 @@ with tab4:
         st.error("❌ The 'pdfplumber' library is not installed. To use this feature, please install it by running: `pip install pdfplumber`")
         st.stop()
     
-    # Select separation method
+    # Add method selection
     st.markdown("**Select how reviews are separated in the PDF:**")
     method = st.radio(
         "Review separation method",
-        options=["Blank lines (paragraphs)", "Each line as separate review"],
-        help="If reviews are separated by blank lines (paragraphs), choose the first option. If each review is on its own line, choose the second."
+        options=["Blank lines (multiline reviews)", "Each line as separate review"],
+        help="If reviews are paragraphs separated by blank lines, choose 'Blank lines'. If each review is on its own line, choose 'Each line'."
     )
-    method_value = 'blank_lines' if method == "Blank lines (paragraphs)" else 'each_line'
+    method_value = 'blank_lines' if method == "Blank lines (multiline reviews)" else 'each_line'
     
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf", key="pdf_uploader")
     
@@ -591,23 +607,10 @@ with tab4:
             if not pdf_text.strip():
                 st.warning("No text found in the PDF. Please ensure the PDF contains selectable text.")
             else:
-                # Split based on method
-                if method_value == 'blank_lines':
-                    # Split by blank lines (one or more newlines)
-                    import re
-                    # Normalize newlines
-                    text = re.sub(r'\r\n', '\n', pdf_text)
-                    # Split on blank lines (one or more empty lines)
-                    reviews = re.split(r'\n\s*\n', text.strip())
-                    # Remove empty strings and strip each review
-                    reviews = [r.strip() for r in reviews if r.strip()]
-                else:
-                    # Each line
-                    reviews = [line.strip() for line in pdf_text.split('\n') if line.strip()]
-                
+                reviews = split_into_reviews(pdf_text, method=method_value)
                 st.info(f"Found {len(reviews)} reviews to analyze.")
                 
-                # Preview extracted reviews
+                # Optional: show preview of first few reviews
                 with st.expander("Preview extracted reviews"):
                     for i, rev in enumerate(reviews[:5]):
                         st.write(f"**Review {i+1}:**")
@@ -690,6 +693,6 @@ with tab4:
 # Footer
 st.markdown("""
     <div class="footer">
-        Made with  using TensorFlow & Streamlit | © 2024 Movie Sentiment AI
+        Made with ❤️ using TensorFlow & Streamlit | © 2024 Movie Sentiment AI
     </div>
 """, unsafe_allow_html=True)
