@@ -327,7 +327,7 @@ def split_into_reviews(text, method='blank_lines'):
 with st.sidebar:
     st.markdown("""
         <div style="text-align: center; padding: 1rem;">
-            <h2 style="color: white;">🎬 Movie Sentiment AI</h2>
+            <h2 style="color: white;"> Movie Sentiment AI</h2>
             <p style="color: #9ca3af;">Your Smart Review Analyzer</p>
         </div>
     """, unsafe_allow_html=True)
@@ -337,7 +337,7 @@ with st.sidebar:
     history_df = load_history()
     total, positive, negative, avg_conf = get_statistics(history_df)
     
-    st.markdown("### 📊 Statistics")
+    st.markdown("###  Statistics")
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Total Reviews", total)
@@ -347,14 +347,14 @@ with st.sidebar:
         st.metric("Avg Confidence", f"{avg_conf:.1%}" if avg_conf > 0 else "N/A")
     
     st.markdown("---")
-    st.markdown("### ℹ️ About")
+    st.markdown("### About")
     st.info("""
         This AI model analyzes movie reviews and determines if they're positive or negative.
         Built with TensorFlow and trained on the IMDB dataset.
     """)
     
     st.markdown("---")
-    st.markdown("### 🎯 Tips")
+    st.markdown("###  Tips")
     st.success("""
         • Write detailed reviews for better accuracy
         • Include specific examples
@@ -362,18 +362,18 @@ with st.sidebar:
     """)
 
 # Main Content
-st.markdown('<div class="main-title">🎬 Movie Review Sentiment AI</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title"> Movie Review Sentiment AI</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Powered by Deep Learning • Analyze your movie reviews in seconds</div>', unsafe_allow_html=True)
 
-# Create tabs
-tab1, tab2, tab3, tab4 = st.tabs(["🔍 Analyze Review", "📜 Review History", "📈 Analytics", "📄 Batch Upload (PDF)"])
+# Create tab 
+tab1, tab2, tab3, tab4 = st.tabs(["   Analyze Review", "   Review History", "   Analytics", "  Batch Upload (PDF)"])
 
 # Tab 1: Single review analysis
 with tab1:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-        st.markdown("### ✍️ Enter Your Review")
+        st.markdown("###  Enter Your Review")
         
         if 'review_text' not in st.session_state:
             st.session_state.review_text = ""
@@ -381,10 +381,10 @@ with tab1:
         st.markdown("**Need inspiration? Try these examples:**")
         ex_col1, ex_col2 = st.columns(2)
         
-        if ex_col1.button("🎭 Positive Example", key="positive_example"):
+        if ex_col1.button(" Positive Example", key="positive_example"):
             st.session_state.review_text = "This movie is a masterpiece! The cinematography was breathtaking and the performances were outstanding. I was completely captivated from start to finish!"
         
-        if ex_col2.button("💔 Negative Example", key="negative_example"):
+        if ex_col2.button(" Negative Example", key="negative_example"):
             st.session_state.review_text = "What a waste of time! The plot was predictable, the acting was wooden, and the special effects looked like they were from 20 years ago."
         
         user_input = st.text_area(
@@ -399,11 +399,11 @@ with tab1:
         
         st.markdown("---")
         
-        classify_btn = st.button("🔍 Analyze Sentiment", use_container_width=True, key="classify_btn")
+        classify_btn = st.button(" Analyze Sentiment", use_container_width=True, key="classify_btn")
         
         if classify_btn:
             if user_input.strip() == "":
-                st.warning("⚠️ Please enter a review to analyze")
+                st.warning(" Please enter a review to analyze")
             else:
                 with st.spinner("Analyzing your review..."):
                     processed = preprocess_text(user_input)
@@ -415,12 +415,12 @@ with tab1:
                     
                     save_review(user_input, sentiment, prediction)
                     
-                    st.markdown("### 📊 Analysis Results")
+                    st.markdown("###  Analysis Results")
                     
                     if sentiment == "Positive":
-                        st.markdown(f'<div class="sentiment-positive" style="margin: 0 auto; text-align: center;">🎉 {sentiment} Sentiment</div>', unsafe_allow_html=True)
+                        st.markdown(f'<div class="sentiment-positive" style="margin: 0 auto; text-align: center;"> {sentiment} Sentiment</div>', unsafe_allow_html=True)
                     else:
-                        st.markdown(f'<div class="sentiment-negative" style="margin: 0 auto; text-align: center;">😞 {sentiment} Sentiment</div>', unsafe_allow_html=True)
+                        st.markdown(f'<div class="sentiment-negative" style="margin: 0 auto; text-align: center;"> {sentiment} Sentiment</div>', unsafe_allow_html=True)
                     
                     st.markdown(f"**Confidence:** {confidence:.1%}")
                     st.progress(confidence)
@@ -452,7 +452,7 @@ with tab1:
 # Tab 2: History
 with tab2:
     st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-    st.markdown("### 📜 Review History")
+    st.markdown("###  Review History")
     
     history = load_history()
     
@@ -481,7 +481,7 @@ with tab2:
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
-                label="📥 Download as CSV",
+                label=" Download as CSV",
                 data=history.to_csv(index=False),
                 file_name=f"movie_reviews_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                 mime="text/csv",
@@ -490,7 +490,7 @@ with tab2:
             )
         
         with col2:
-            if st.button("🗑️ Clear History", use_container_width=True, key="clear_btn"):
+            if st.button(" Clear History", use_container_width=True, key="clear_btn"):
                 if os.path.exists(FILE_NAME):
                     os.remove(FILE_NAME)
                     st.success("History cleared successfully!")
@@ -501,7 +501,7 @@ with tab2:
 # Tab 3: Analytics
 with tab3:
     st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-    st.markdown("### 📈 Analytics Dashboard")
+    st.markdown("###  Analytics Dashboard")
     
     history = load_history()
     
@@ -554,7 +554,7 @@ with tab3:
             except:
                 st.warning("Unable to create timeline chart. Ensure timestamps are in correct format.")
         
-        st.markdown("### 📊 Key Metrics")
+        st.markdown("###  Key Metrics")
         total, positive, negative, avg_conf = get_statistics(history)
         
         col1, col2, col3, col4 = st.columns(4)
@@ -581,11 +581,11 @@ with tab3:
 # Tab 4: Batch Upload PDF (with multiline support)
 with tab4:
     st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-    st.markdown("### 📄 Batch Analyze Reviews from PDF")
+    st.markdown("###  Batch Analyze Reviews from PDF")
     st.markdown("Upload a PDF file containing multiple movie reviews. The app will extract each review and analyze sentiment.")
     
     if not PDF_SUPPORT:
-        st.error("❌ The 'pdfplumber' library is not installed. To use this feature, please install it by running: `pip install pdfplumber`")
+        st.error(" The 'pdfplumber' library is not installed. To use this feature, please install it by running: `pip install pdfplumber`")
         st.stop()
     
     # Add method selection
@@ -618,7 +618,7 @@ with tab4:
                     if len(reviews) > 5:
                         st.write(f"... and {len(reviews)-5} more.")
                 
-                if st.button("🚀 Analyze All Reviews", key="batch_analyze_btn"):
+                if st.button(" Analyze All Reviews", key="batch_analyze_btn"):
                     if len(reviews) == 0:
                         st.warning("No reviews to analyze.")
                     else:
@@ -653,7 +653,7 @@ with tab4:
                         df_results = pd.DataFrame(results)
                         
                         st.success("Analysis complete!")
-                        st.markdown("### 📊 Batch Results")
+                        st.markdown("###  Batch Results")
                         
                         col1, col2, col3 = st.columns(3)
                         with col1:
@@ -678,7 +678,7 @@ with tab4:
                         
                         csv = df_results.to_csv(index=False)
                         st.download_button(
-                            label="📥 Download Results as CSV",
+                            label=" Download Results as CSV",
                             data=csv,
                             file_name=f"batch_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                             mime="text/csv",
@@ -693,6 +693,6 @@ with tab4:
 # Footer
 st.markdown("""
     <div class="footer">
-        Made with ❤️ using TensorFlow & Streamlit | © 2024 Movie Sentiment AI
+        Made with  using TensorFlow & Streamlit | © 2026 Movie Sentiment AI
     </div>
 """, unsafe_allow_html=True)
