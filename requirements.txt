@@ -1,0 +1,5 @@
+streamlit
+tensorflow
+protobuf>=6.31.1
+pandas
+numpy
